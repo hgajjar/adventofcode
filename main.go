@@ -25,8 +25,16 @@ func main() {
 	day3input := puzzle.TreeMap{
 		Coords: convertStringsToArrayOfChar(readFileIntoStringsArray("data/day3.txt")),
 	}
-	day3result := day3input.FindNumberOfTreesAtPath(puzzle.SlopePath{X: 3, Y: 1})
-	fmt.Println(fmt.Sprintf("Day3 Result: %d", day3result))
+	day3part1result := day3input.FindNumberOfTreesAtPath(puzzle.SlopePath{Right: 1, Down: 2})
+	fmt.Println(fmt.Sprintf("Day3 Part1 Result: %d", day3part1result))
+	day3part2result := day3input.FindProductOfNumberOfTreesAtPaths([]puzzle.SlopePath{
+		puzzle.SlopePath{Right: 1, Down: 1},
+		puzzle.SlopePath{Right: 3, Down: 1},
+		puzzle.SlopePath{Right: 5, Down: 1},
+		puzzle.SlopePath{Right: 7, Down: 1},
+		puzzle.SlopePath{Right: 1, Down: 2},
+	})
+	fmt.Println(fmt.Sprintf("Day3 Part2 Result: %d", day3part2result))
 }
 
 func readFileIntoStringsArray(fileName string) []string {
