@@ -21,6 +21,12 @@ func main() {
 	fmt.Println(fmt.Sprintf("Day2 Part1 Result: %d", day2part1result))
 	day2part2result := puzzle.ValidatePasswordsByStrategy(readFileIntoStringsArray("data/day2.txt"), puzzle.NewStrategy)
 	fmt.Println(fmt.Sprintf("Day2 Part2 Result: %d", day2part2result))
+
+	day3input := puzzle.TreeMap{
+		Coords: convertStringsToArrayOfChar(readFileIntoStringsArray("data/day3.txt")),
+	}
+	day3result := day3input.FindNumberOfTreesAtPath(puzzle.SlopePath{X: 3, Y: 1})
+	fmt.Println(fmt.Sprintf("Day3 Result: %d", day3result))
 }
 
 func readFileIntoStringsArray(fileName string) []string {
@@ -39,6 +45,20 @@ func convertStringsToInt(array []string) []int {
 		}
 
 		result = append(result, convertedStr)
+	}
+
+	return result
+}
+
+func convertStringsToArrayOfChar(inputArray []string) [][]string {
+	var result = make([][]string, len(inputArray))
+
+	for i, str := range inputArray {
+		charArray := []string{}
+		for _, s := range str {
+			charArray = append(charArray, fmt.Sprintf("%c", s))
+		}
+		result[i] = charArray
 	}
 
 	return result
