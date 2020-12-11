@@ -1,4 +1,4 @@
-package puzzle
+package day1
 
 // ReportRepairPart1 finds the two numbers from input which adds up to 2020
 // and returns their product

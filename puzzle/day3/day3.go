@@ -1,4 +1,4 @@
-package puzzle
+package day3
 
 // TreeMap structure
 type TreeMap struct {

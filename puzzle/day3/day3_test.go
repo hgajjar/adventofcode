@@ -1,12 +1,12 @@
-package puzzle_test
+package day3_test
 
 import (
 	"testing"
 
-	"github.com/hgajjar/adventofcode/puzzle"
+	"github.com/hgajjar/adventofcode/puzzle/day3"
 )
 
-var treeMap = puzzle.TreeMap{
+var treeMap = day3.TreeMap{
 	Coords: [][]string{
 		[]string{".", ".", "#", "#", ".", ".", ".", ".", ".", ".", "."},
 		[]string{"#", ".", ".", ".", "#", ".", ".", ".", "#", ".", "."},
@@ -23,7 +23,7 @@ var treeMap = puzzle.TreeMap{
 }
 
 func TestFindNumberOfTreesAtPath(t *testing.T) {
-	findPath := puzzle.SlopePath{3, 1}
+	findPath := day3.SlopePath{3, 1}
 
 	totalTreesAtPath := treeMap.FindNumberOfTreesAtPath(findPath)
 
@@ -33,12 +33,12 @@ func TestFindNumberOfTreesAtPath(t *testing.T) {
 }
 
 func TestFindProductOfNumberOfTreesAtPaths(t *testing.T) {
-	slopePaths := []puzzle.SlopePath{
-		puzzle.SlopePath{1, 1},
-		puzzle.SlopePath{3, 1},
-		puzzle.SlopePath{5, 1},
-		puzzle.SlopePath{7, 1},
-		puzzle.SlopePath{1, 2},
+	slopePaths := []day3.SlopePath{
+		day3.SlopePath{1, 1},
+		day3.SlopePath{3, 1},
+		day3.SlopePath{5, 1},
+		day3.SlopePath{7, 1},
+		day3.SlopePath{1, 2},
 	}
 
 	productOfTotalTreesAtPaths := treeMap.FindProductOfNumberOfTreesAtPaths(slopePaths)
