@@ -39,8 +39,10 @@ func main() {
 	})
 	fmt.Println(fmt.Sprintf("Day3 Part2 Result: %d", day3part2result))
 
-	day4part1result := day4.CountValidPassports(day4.ParseInputToPassports("data/day4.txt"))
+	day4part1result := day4.CountValidPassports(day4.ParseInputToPassports("data/day4.txt"), day4.ValidationStrategyEmptyness)
 	fmt.Println(fmt.Sprintf("Day4 Part1 Result: %d", day4part1result))
+	day4part2result := day4.CountValidPassports(day4.ParseInputToPassports("data/day4.txt"), day4.ValidationStrategyStrict)
+	fmt.Println(fmt.Sprintf("Day4 Part2 Result: %d", day4part2result))
 }
 
 func readFileIntoStringsArray(fileName string) []string {
