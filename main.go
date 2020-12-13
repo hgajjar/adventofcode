@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/hgajjar/adventofcode/puzzle/day5"
+
 	"github.com/hgajjar/adventofcode/puzzle/day1"
 	"github.com/hgajjar/adventofcode/puzzle/day2"
 	"github.com/hgajjar/adventofcode/puzzle/day3"
@@ -43,6 +45,12 @@ func main() {
 	fmt.Println(fmt.Sprintf("Day4 Part1 Result: %d", day4part1result))
 	day4part2result := day4.CountValidPassports(day4.ParseInputToPassports("data/day4.txt"), day4.ValidationStrategyStrict)
 	fmt.Println(fmt.Sprintf("Day4 Part2 Result: %d", day4part2result))
+
+	day5input := day5.ParseInputToBoardingPasses("data/day5.txt")
+	day5part1result := day5.GetHighestSeatID(day5input)
+	fmt.Println(fmt.Sprintf("Day5 Part1 Result: %d", day5part1result))
+	day5part2result := day5.FindRemainingSeatID(day5input)
+	fmt.Println(fmt.Sprintf("Day5 Part2 Result: %d", day5part2result))
 }
 
 func readFileIntoStringsArray(fileName string) []string {
