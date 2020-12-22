@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/hgajjar/adventofcode/puzzle/day5"
+	"github.com/hgajjar/adventofcode/puzzle/day6"
 
 	"github.com/hgajjar/adventofcode/puzzle/day1"
 	"github.com/hgajjar/adventofcode/puzzle/day2"
@@ -33,11 +34,11 @@ func main() {
 	day3part1result := day3input.FindNumberOfTreesAtPath(day3.SlopePath{Right: 1, Down: 2})
 	fmt.Println(fmt.Sprintf("Day3 Part1 Result: %d", day3part1result))
 	day3part2result := day3input.FindProductOfNumberOfTreesAtPaths([]day3.SlopePath{
-		day3.SlopePath{Right: 1, Down: 1},
-		day3.SlopePath{Right: 3, Down: 1},
-		day3.SlopePath{Right: 5, Down: 1},
-		day3.SlopePath{Right: 7, Down: 1},
-		day3.SlopePath{Right: 1, Down: 2},
+		{Right: 1, Down: 1},
+		{Right: 3, Down: 1},
+		{Right: 5, Down: 1},
+		{Right: 7, Down: 1},
+		{Right: 1, Down: 2},
 	})
 	fmt.Println(fmt.Sprintf("Day3 Part2 Result: %d", day3part2result))
 
@@ -51,6 +52,11 @@ func main() {
 	fmt.Println(fmt.Sprintf("Day5 Part1 Result: %d", day5part1result))
 	day5part2result := day5.FindRemainingSeatID(day5input)
 	fmt.Println(fmt.Sprintf("Day5 Part2 Result: %d", day5part2result))
+
+	day6part1result := day6.CountAnswersWhereAnyoneInGroupSaidYes(day6.ParseInput("data/day6.txt"))
+	fmt.Println(fmt.Sprintf("Day6 Part1 Result: %d", day6part1result))
+	day6part2result := day6.CountAnswersWhereEveryoneInGroupSaidYes(day6.ParseInput("data/day6.txt"))
+	fmt.Println(fmt.Sprintf("Day6 Part2 Result: %d", day6part2result))
 }
 
 func readFileIntoStringsArray(fileName string) []string {
