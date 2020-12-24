@@ -1,6 +1,9 @@
 package day5
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 // Flight defines the seating arrangement structure
 type Flight struct {
@@ -33,18 +36,37 @@ func (flight Flight) FindSeatID(pass *BoardingPass) int {
 
 // GetHighestSeatID finds seat IDs of each boarding pass and returns
 // the one with highest seat ID
-func GetHighestSeatID(passes []BoardingPass) int {
+func GetHighestSeatID(passes []BoardingPass) uint32 {
 	flight := Flight{SeatRange{0, 127}, SeatRange{0, 7}}
-	var highestSeatID int
+	var wg sync.WaitGroup
+	wg.Add(len(passes))
+
+	in := make(chan uint32, len(passes))
+	out := make(chan uint32)
 
 	for _, pass := range passes {
-		seatID := flight.FindSeatID(&pass)
-		if seatID > highestSeatID {
-			highestSeatID = seatID
-		}
+		go func(p BoardingPass) {
+			defer wg.Done()
+			in <- uint32(flight.FindSeatID(&p))
+		}(pass)
 	}
 
-	return highestSeatID
+	go findHighest(in, out)
+
+	wg.Wait()
+	close(in)
+
+	return <-out
+}
+
+func findHighest(in chan uint32, out chan uint32) {
+	var highest uint32 = 0
+	for id := range in {
+		if id > highest {
+			highest = id
+		}
+	}
+	out <- highest
 }
 
 // FindRemainingSeatID finds the remaining seat ID by eliminating the occupied seat IDs

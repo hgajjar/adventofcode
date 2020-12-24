@@ -2,6 +2,7 @@ package day6
 
 import (
 	"sync"
+	"sync/atomic"
 )
 
 type Group struct {
@@ -18,50 +19,42 @@ type CustomsForm struct {
 }
 
 // CountAnswersWhereAnyoneInGroupSaidYes counts unique answers per group and returns sum of them
-func CountAnswersWhereAnyoneInGroupSaidYes(groups []Group) int {
-	groupCount := make(chan int)
-	total := make(chan int)
-
+func CountAnswersWhereAnyoneInGroupSaidYes(groups []Group) uint32 {
+	var c uint32
 	var wg sync.WaitGroup
 	wg.Add(len(groups))
 
 	for _, g := range groups {
 		go func(g Group) {
 			defer wg.Done()
-			groupCount <- g.countUniqueAnswers()
+			atomic.AddUint32(&c, g.countUniqueAnswers())
 		}(g)
 	}
 
-	go sumCounts(groupCount, total, len(groups))
-
 	wg.Wait()
 
-	return <-total
+	return c
 }
 
 // CountAnswersWhereEveryoneInGroupSaidYes counts answers per group where everyone said Yes and returns sum of them
-func CountAnswersWhereEveryoneInGroupSaidYes(groups []Group) int {
-	groupCount := make(chan int)
-	total := make(chan int)
-
+func CountAnswersWhereEveryoneInGroupSaidYes(groups []Group) uint32 {
+	var c uint32
 	var wg sync.WaitGroup
 	wg.Add(len(groups))
 
 	for _, g := range groups {
 		go func(g Group) {
-			wg.Done()
-			groupCount <- g.countCommonAnswers()
+			defer wg.Done()
+			atomic.AddUint32(&c, g.countCommonAnswers())
 		}(g)
 	}
 
-	go sumCounts(groupCount, total, len(groups))
-
 	wg.Wait()
 
-	return <-total
+	return c
 }
 
-func (g *Group) countUniqueAnswers() int {
+func (g *Group) countUniqueAnswers() uint32 {
 	uniqueAnswers := make(map[string]bool)
 	for _, p := range g.Persons {
 		for k, v := range p.FilledForm.QuestionAnswers {
@@ -69,10 +62,10 @@ func (g *Group) countUniqueAnswers() int {
 		}
 	}
 
-	return len(uniqueAnswers)
+	return uint32(len(uniqueAnswers))
 }
 
-func (g *Group) countCommonAnswers() int {
+func (g *Group) countCommonAnswers() uint32 {
 	answers := make(map[string]int)
 	for _, p := range g.Persons {
 		for k := range p.FilledForm.QuestionAnswers {
@@ -83,7 +76,7 @@ func (g *Group) countCommonAnswers() int {
 		}
 	}
 
-	commonAnswersCount := 0
+	var commonAnswersCount uint32 = 0
 	for _, v := range answers {
 		if v >= len(g.Persons) {
 			commonAnswersCount++
@@ -91,12 +84,4 @@ func (g *Group) countCommonAnswers() int {
 	}
 
 	return commonAnswersCount
-}
-
-func sumCounts(groupCount chan int, sendTotal chan int, iterations int) {
-	total := 0
-	for i := 0; i < iterations; i++ {
-		total += <-groupCount
-	}
-	sendTotal <- total
 }

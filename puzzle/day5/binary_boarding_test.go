@@ -6,6 +6,8 @@ import (
 	"github.com/hgajjar/adventofcode/puzzle/day5"
 )
 
+var input = day5.ParseInputToBoardingPasses("../../data/day5.txt")
+
 func TestFindSeatID(t *testing.T) {
 	flight := day5.Flight{day5.SeatRange{0, 127}, day5.SeatRange{0, 7}}
 
@@ -33,12 +35,32 @@ func TestFindSeatID(t *testing.T) {
 
 func TestGetHighestSeatID(t *testing.T) {
 	highestSeatID := day5.GetHighestSeatID([]day5.BoardingPass{
-		day5.BoardingPass{PassNumber: "BFFFBBFRRR"},
-		day5.BoardingPass{PassNumber: "FFFBBBFRRR"},
-		day5.BoardingPass{PassNumber: "BBFFBBFRLL"},
+		{PassNumber: "BFFFBBFRRR"},
+		{PassNumber: "FFFBBBFRRR"},
+		{PassNumber: "BBFFBBFRLL"},
 	})
 
 	if highestSeatID != 820 {
 		t.Errorf("Expected highest seat ID: %d, found %d", 820, highestSeatID)
+	}
+
+	highestSeatID = day5.GetHighestSeatID(input)
+
+	if highestSeatID != 855 {
+		t.Errorf("Expected highest seat ID: %d, found %d", 855, highestSeatID)
+	}
+}
+
+func TestFindRemainingSeatID(t *testing.T) {
+	remainingSeatId := day5.FindRemainingSeatID(input)
+
+	if remainingSeatId != 552 {
+		t.Errorf("Expected remaining seat ID: %d, got: %d", 552, remainingSeatId)
+	}
+}
+
+func BenchmarkGetHighestSeatID(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		day5.GetHighestSeatID(input)
 	}
 }
