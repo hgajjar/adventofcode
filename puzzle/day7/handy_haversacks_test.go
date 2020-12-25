@@ -45,7 +45,7 @@ func TestCountInnerBags(t *testing.T) {
 
 	realOutput := searchBag.CountInnerBags(realInput)
 
-	if realOutput != 101 {
-		t.Errorf("Expected inner bags: %d, got: %d", 101, realOutput)
+	if realOutput != 108636 {
+		t.Errorf("Expected inner bags: %d, got: %d", 108636, realOutput)
 	}
 }
