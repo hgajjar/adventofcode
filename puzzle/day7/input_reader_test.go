@@ -7,13 +7,13 @@ import (
 )
 
 var expectedBags = []day7.Bag{
-	{Color: "light red", Bags: []day7.Bag{{Color: "bright white"}, {Color: "muted yellow"}}},
-	{Color: "dark orange", Bags: []day7.Bag{{Color: "bright white"}, {Color: "muted yellow"}}},
-	{Color: "bright white", Bags: []day7.Bag{{Color: "shiny gold"}}},
-	{Color: "muted yellow", Bags: []day7.Bag{{Color: "shiny gold"}, {Color: "faded blue"}}},
-	{Color: "shiny gold", Bags: []day7.Bag{{Color: "dark olive"}, {Color: "vibrant plum"}}},
-	{Color: "dark olive", Bags: []day7.Bag{{Color: "faded blue"}, {Color: "dotted black"}}},
-	{Color: "vibrant plum", Bags: []day7.Bag{{Color: "faded blue"}, {Color: "dotted black"}}},
+	{Color: "light red", Bags: []day7.Bag{{Color: "bright white", Qty: 1}, {Color: "muted yellow", Qty: 2}}},
+	{Color: "dark orange", Bags: []day7.Bag{{Color: "bright white", Qty: 3}, {Color: "muted yellow", Qty: 4}}},
+	{Color: "bright white", Bags: []day7.Bag{{Color: "shiny gold", Qty: 1}}},
+	{Color: "muted yellow", Bags: []day7.Bag{{Color: "shiny gold", Qty: 2}, {Color: "faded blue", Qty: 9}}},
+	{Color: "shiny gold", Bags: []day7.Bag{{Color: "dark olive", Qty: 1}, {Color: "vibrant plum", Qty: 2}}},
+	{Color: "dark olive", Bags: []day7.Bag{{Color: "faded blue", Qty: 3}, {Color: "dotted black", Qty: 4}}},
+	{Color: "vibrant plum", Bags: []day7.Bag{{Color: "faded blue", Qty: 5}, {Color: "dotted black", Qty: 6}}},
 	{Color: "faded blue"},
 	{Color: "dotted black"},
 }

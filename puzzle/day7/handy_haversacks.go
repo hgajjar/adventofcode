@@ -3,11 +3,11 @@ package day7
 import (
 	"errors"
 	"sync"
-	"time"
 )
 
 type Bag struct {
 	Color string
+	Qty   int
 	Bags  []Bag
 }
 
@@ -24,6 +24,10 @@ func (searchBag *Bag) CountOuterBags(allBags []Bag) int {
 	close(bagChan)
 
 	return <-countChan
+}
+
+func (searchBag *Bag) CountInnerBags(allBags []Bag) int {
+	return searchBag.findInnerBags(allBags) - 1
 }
 
 func (searchBag *Bag) findOuterBags(allBags []Bag, c chan map[string]Bag, wg *sync.WaitGroup) {
@@ -46,6 +50,24 @@ func (searchBag *Bag) findOuterBags(allBags []Bag, c chan map[string]Bag, wg *sy
 	}
 }
 
+func (searchBag *Bag) findInnerBags(allBags []Bag) int {
+	childBagsCount := 0
+	for _, bag := range allBags {
+		if bag.Color == searchBag.Color {
+			grandChildBagsCount := 0
+			for _, b := range bag.Bags {
+				grandChildBagsCount += b.findInnerBags(allBags)
+			}
+			if grandChildBagsCount == 0 {
+				return searchBag.Qty
+			}
+			return searchBag.Qty + (searchBag.Qty * grandChildBagsCount)
+		}
+	}
+
+	return childBagsCount
+}
+
 func countBags(bagChan chan map[string]Bag, countChan chan int) {
 	uniqueBags := make(map[string]Bag)
 	for bagMap := range bagChan {
@@ -58,7 +80,6 @@ func countBags(bagChan chan map[string]Bag, countChan chan int) {
 }
 
 func (searchBag *Bag) isWithinBags(bags []Bag) (Bag, error) {
-	time.Sleep(time.Nanosecond * 5)
 	for _, b := range bags {
 		if b.Color == searchBag.Color {
 			return Bag{}, nil

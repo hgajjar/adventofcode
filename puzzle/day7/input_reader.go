@@ -3,6 +3,7 @@ package day7
 import (
 	"io/ioutil"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -23,7 +24,11 @@ func ParseInputToBags(fileName string) []Bag {
 			}
 
 			childBagMatch := regex.FindStringSubmatch(childBagPart)
-			bag.Bags = append(bag.Bags, Bag{Color: childBagMatch[2]})
+			innerBagCount, _ := strconv.Atoi(childBagMatch[1])
+			bag.Bags = append(bag.Bags, Bag{
+				Color: childBagMatch[2],
+				Qty:   innerBagCount,
+			})
 		}
 
 		bags = append(bags, bag)
