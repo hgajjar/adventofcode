@@ -27,10 +27,6 @@ func TestCountOuterBags(t *testing.T) {
 func BenchmarkCountOuterBags(b *testing.B) {
 	// without concurrency: BenchmarkCountOuterBags-4            276           4140232 ns/op
 	// with concurrency: BenchmarkCountOuterBags-4            480           2649880 ns/op (56% faster)
-
-	// with 5 ns delay
-	// without BenchmarkCountOuterBags-3             25          49470532 ns/op
-	// with BenchmarkCountOuterBags-3             79          14439482 ns/op (71% faster)
 	for i := 0; i < b.N; i++ {
 		searchBag.CountOuterBags(realInput)
 	}
@@ -47,5 +43,13 @@ func TestCountInnerBags(t *testing.T) {
 
 	if realOutput != 108636 {
 		t.Errorf("Expected inner bags: %d, got: %d", 108636, realOutput)
+	}
+}
+
+func BenchmarkCountInnerBags(b *testing.B) {
+	// without concurrency: BenchmarkCountInnerBags-4           7701            147729 ns/op
+	// with concurrency: BenchmarkCountInnerBags-4          11367            107975 ns/op (27% faster)
+	for i := 0; i < b.N; i++ {
+		searchBag.CountInnerBags(realInput)
 	}
 }

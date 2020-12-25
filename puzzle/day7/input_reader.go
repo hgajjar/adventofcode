@@ -27,7 +27,7 @@ func ParseInputToBags(fileName string) []Bag {
 			innerBagCount, _ := strconv.Atoi(childBagMatch[1])
 			bag.Bags = append(bag.Bags, Bag{
 				Color: childBagMatch[2],
-				Qty:   innerBagCount,
+				Qty:   int32(innerBagCount),
 			})
 		}
 
