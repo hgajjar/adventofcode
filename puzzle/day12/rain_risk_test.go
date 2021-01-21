@@ -10,13 +10,13 @@ var (
 func TestFindManhattanDistance(t *testing.T) {
 	testResult := findManhattanDistance(testInput)
 
-	if testResult != 25 {
-		t.Errorf("Expected Manhattan distance: %d, found: %d", 25, testResult)
+	if testResult != 286 {
+		t.Errorf("Expected Manhattan distance: %d, found: %d", 286, testResult)
 	}
 
 	realResult := findManhattanDistance(realInput)
 
-	if realResult != 1148 {
-		t.Errorf("Expected Manhattan distance: %d, found: %d", 1148, realResult)
+	if realResult != 52203 {
+		t.Errorf("Expected Manhattan distance: %d, found: %d", 52203, realResult)
 	}
 }
