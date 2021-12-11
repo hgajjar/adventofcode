@@ -7,10 +7,38 @@ class Day3(private var inputReader: InputReader) {
 
     fun run() {
         println("Day3 - Part I: ${this.part1()}")
+        println("Day3 - Part II: ${this.part2()}")
     }
 
     private fun part1(): Int {
         return this.generateGammaRate() * this.generateEpsilonRate()
+    }
+
+    private fun part2(): Int {
+        val oxygenGeneratorRetingCriteria = fun(ones: Int, zeros: Int, col: Int, report: Matrix): Matrix {
+            return if (ones > zeros) {
+                report.filter { it[col] == 1 }.toTypedArray()
+            } else if (zeros > ones) {
+                report.filter { it[col] == 0 }.toTypedArray()
+            } else {
+                report.filter { it[col] == 1 }.toTypedArray()
+            }
+        }
+
+        val co2ScrubberRatingCriteria = fun(ones: Int, zeros: Int, col: Int, report: Matrix): Matrix {
+            return if (ones > zeros) {
+                report.filter { it[col] == 0 }.toTypedArray()
+            } else if (zeros > ones) {
+                report.filter { it[col] == 1 }.toTypedArray()
+            } else {
+                report.filter { it[col] == 0 }.toTypedArray()
+            }
+        }
+
+        val o2 = this.filterByBitCriteria(this.parseInput(), 0, oxygenGeneratorRetingCriteria)
+        val co2 = this.filterByBitCriteria(this.parseInput(), 0, co2ScrubberRatingCriteria)
+
+        return o2 * co2
     }
 
     private fun generateGammaRate(): Int {
@@ -30,6 +58,31 @@ class Day3(private var inputReader: InputReader) {
             .map(condition)
             .joinToString(separator = "")
             .toInt(2)
+    }
+
+    private fun filterByBitCriteria(report: Matrix, currentCol: Int, criteria: (ones: Int, zeros: Int, col: Int, report: Matrix) -> Matrix): Int {
+        var filteredReport: Matrix
+        for (col in currentCol until  report[0].size) {
+            var zeros = 0
+            var ones = 0
+            for (element in report) {
+                if (element[col] == 0) {
+                    zeros++
+                } else {
+                    ones++
+                }
+            }
+
+            filteredReport = criteria(ones, zeros, col, report)
+
+            return if (filteredReport.size != 1) {
+                this.filterByBitCriteria(filteredReport, col+1, criteria)
+            } else {
+                filteredReport[0].joinToString(separator = "").toInt(2)
+            }
+        }
+
+        return 0
     }
 
     private fun parseInput(): Matrix {
