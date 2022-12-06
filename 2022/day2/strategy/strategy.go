@@ -8,12 +8,12 @@ import (
 
 type Strategy struct {
 	OpponentShape shape.Shape
-	OwnShape      shape.Shape
+	strategy      string
 }
 
 type Guide []Strategy
 
-func ParseGuide(input string) Guide {
+func NewGuide(input string) Guide {
 	var guide Guide
 	for _, i := range strings.Split(input, "\n") {
 		letters := strings.Split(i, " ")
@@ -23,7 +23,7 @@ func ParseGuide(input string) Guide {
 
 		s := Strategy{
 			OpponentShape: mapStrategyLetterToShape(letters[0]),
-			OwnShape:      mapStrategyLetterToShape(letters[1]),
+			strategy:      letters[1],
 		}
 
 		guide = append(guide, s)
@@ -32,13 +32,25 @@ func ParseGuide(input string) Guide {
 	return guide
 }
 
+func (s Strategy) Lose() bool {
+	return s.strategy == "X"
+}
+
+func (s Strategy) Draw() bool {
+	return s.strategy == "Y"
+}
+
+func (s Strategy) Win() bool {
+	return s.strategy == "Z"
+}
+
 func mapStrategyLetterToShape(letter string) shape.Shape {
 	switch letter {
-	case "A", "X":
+	case "A":
 		return shape.NewRock()
-	case "B", "Y":
+	case "B":
 		return shape.NewPaper()
-	case "C", "Z":
+	case "C":
 		return shape.NewScissors()
 	}
 

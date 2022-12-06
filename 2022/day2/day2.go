@@ -16,6 +16,6 @@ var (
 )
 
 func Execute() {
-	fmt.Println(game.Play(strategy.ParseGuide(sampleInput)))
-	fmt.Println(game.Play(strategy.ParseGuide(actualInput)))
+	fmt.Println(game.Play(strategy.NewGuide(sampleInput)))
+	fmt.Println(game.Play(strategy.NewGuide(actualInput)))
 }

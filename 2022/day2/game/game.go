@@ -1,6 +1,9 @@
 package game
 
-import "adventofcode/day2/strategy"
+import (
+	"adventofcode/day2/shape"
+	"adventofcode/day2/strategy"
+)
 
 const (
 	winScore  = 6
@@ -18,17 +21,41 @@ func Play(strategyGuide strategy.Guide) int {
 }
 
 func playRound(s strategy.Strategy) int {
-	if (s.OpponentShape.IsRock() && s.OwnShape.IsRock()) ||
-		(s.OpponentShape.IsPaper() && s.OwnShape.IsPaper()) ||
-		(s.OpponentShape.IsScissors() && s.OwnShape.IsScissors()) {
-		return drawScore + s.OwnShape.Score()
-	}
+	if s.Draw() {
+		var chosenShape shape.Shape
 
-	if (s.OpponentShape.IsRock() && s.OwnShape.IsPaper()) ||
-		(s.OpponentShape.IsPaper() && s.OwnShape.IsScissors()) ||
-		(s.OpponentShape.IsScissors() && s.OwnShape.IsRock()) {
-		return winScore + s.OwnShape.Score()
-	}
+		if s.OpponentShape.IsRock() {
+			chosenShape = shape.NewRock()
+		} else if s.OpponentShape.IsPaper() {
+			chosenShape = shape.NewPaper()
+		} else if s.OpponentShape.IsScissors() {
+			chosenShape = shape.NewScissors()
+		}
 
-	return loseScore + s.OwnShape.Score()
+		return drawScore + chosenShape.Score()
+	} else if s.Lose() {
+		var chosenShape shape.Shape
+
+		if s.OpponentShape.IsRock() {
+			chosenShape = shape.NewScissors()
+		} else if s.OpponentShape.IsPaper() {
+			chosenShape = shape.NewRock()
+		} else if s.OpponentShape.IsScissors() {
+			chosenShape = shape.NewPaper()
+		}
+
+		return loseScore + chosenShape.Score()
+	} else {
+		var chosenShape shape.Shape
+
+		if s.OpponentShape.IsScissors() {
+			chosenShape = shape.NewRock()
+		} else if s.OpponentShape.IsRock() {
+			chosenShape = shape.NewPaper()
+		} else if s.OpponentShape.IsPaper() {
+			chosenShape = shape.NewScissors()
+		}
+
+		return winScore + chosenShape.Score()
+	}
 }
