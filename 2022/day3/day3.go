@@ -6,7 +6,6 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/samber/lo"
-	"strings"
 )
 
 var (
@@ -18,22 +17,20 @@ var (
 )
 
 func Execute() {
-	fmt.Println(countTotalPrioritiesOfAllRucksacks(sampleInput))
-	fmt.Println(countTotalPrioritiesOfAllRucksacks(actualInput))
+	fmt.Println(countTotalPriorities(sampleInput))
+	fmt.Println(countTotalPriorities(actualInput))
 }
 
-func countTotalPrioritiesOfAllRucksacks(input string) int {
-	var sharedItemsSumByRucksack []item.Priority
-	for _, items := range strings.Split(input, "\n") {
-		r := rucksack.New(items)
-		sharedItems := lo.Uniq(lo.Intersect[item.Item](r.Compartments[0], r.Compartments[1]))
+func countTotalPriorities(input string) item.Priority {
+	var total item.Priority
+	for _, group := range rucksack.Groups(input) {
+		sharedItems := lo.Uniq(lo.Intersect[item.Item](group[0], group[1]))
+		sharedItems = lo.Uniq(lo.Intersect[item.Item](sharedItems, group[2]))
 
-		sum := lo.SumBy(sharedItems, func(i item.Item) item.Priority {
-			return i.Priority()
-		})
-
-		sharedItemsSumByRucksack = append(sharedItemsSumByRucksack, sum)
+		for _, s := range sharedItems {
+			total += s.Priority()
+		}
 	}
 
-	return int(lo.Sum(sharedItemsSumByRucksack))
+	return total
 }
