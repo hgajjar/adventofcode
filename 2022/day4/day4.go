@@ -28,7 +28,7 @@ func countTotalOverlappingPairs(input string) int {
 		elf1 := elf.NewWithAssignmentRange(assignments[0])
 		elf2 := elf.NewWithAssignmentRange(assignments[1])
 
-		if lo.Every(elf1.Sections, elf2.Sections) || lo.Every(elf2.Sections, elf1.Sections) {
+		if lo.Some(elf1.Sections, elf2.Sections) || lo.Some(elf2.Sections, elf1.Sections) {
 			total++
 		}
 	}
