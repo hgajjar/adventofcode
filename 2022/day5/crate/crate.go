@@ -9,17 +9,19 @@ type crate byte
 
 type Stack []crate
 
-func (s *Stack) Push(c crate) {
-	*s = append(*s, c)
+func (s *Stack) Push(crates []crate) {
+	for _, c := range crates {
+		*s = append(*s, c)
+	}
 }
 
-func (s *Stack) Pop() crate {
-	n := len(*s) - 1
+func (s *Stack) Pop(n int) []crate {
+	offset := len(*s) - n
 	ss := *s
-	c := ss[n]
-	*s = ss[:n]
+	popped := ss[offset:]
+	*s = ss[:offset]
 
-	return c
+	return popped
 }
 
 func CreateStacks(input string) []Stack {
@@ -56,7 +58,7 @@ func CreateStacks(input string) []Stack {
 func GetTopCrateFromEachStack(stacks []Stack) []crate {
 	var topCrates []crate
 	for _, s := range stacks {
-		topCrates = append(topCrates, s.Pop())
+		topCrates = append(topCrates, s[len(s)-1])
 	}
 
 	return topCrates
