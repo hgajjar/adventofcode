@@ -15,7 +15,7 @@ var (
 )
 
 const (
-	packetLength int = 4
+	packetLength int = 14
 )
 
 func Execute() {
@@ -25,8 +25,8 @@ func Execute() {
 
 func findStartOfPacketMarker(input string) int {
 	for i := 0; i < (len(input) - packetLength + 1); i++ {
-		if len(lo.Uniq[byte]([]byte(input[i:i+4]))) == 4 {
-			return i + 4
+		if len(lo.Uniq[byte]([]byte(input[i:i+packetLength]))) == packetLength {
+			return i + packetLength
 		}
 	}
 
