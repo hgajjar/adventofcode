@@ -46,15 +46,15 @@ func (d *Dir) ComputeSize() int64 {
 	return total
 }
 
-func (d *Dir) FindDirsWithSizeLessThan(limit int64) []*Dir {
+func (d *Dir) FindDirsWithSizeGreaterThan(limit int64) []*Dir {
 	var foundDirs []*Dir
 
-	if d.size < limit {
+	if d.size > limit {
 		foundDirs = append(foundDirs, d)
 	}
 
 	for _, childDir := range d.dirs {
-		foundDirs = append(foundDirs, childDir.FindDirsWithSizeLessThan(limit)...)
+		foundDirs = append(foundDirs, childDir.FindDirsWithSizeGreaterThan(limit)...)
 	}
 
 	return foundDirs

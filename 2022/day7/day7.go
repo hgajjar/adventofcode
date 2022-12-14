@@ -15,16 +15,25 @@ var (
 	actualInput string
 )
 
+const (
+	totalSpace        = 70000000
+	freeSpaceRequired = 30000000
+)
+
 func Execute() {
-	fmt.Println(countTotalSizeofSmallDirs(sampleInput))
-	fmt.Println(countTotalSizeofSmallDirs(actualInput))
+	fmt.Println(findTotalSizeOfSmallestDirToFreeEnoughSpace(sampleInput))
+	fmt.Println(findTotalSizeOfSmallestDirToFreeEnoughSpace(actualInput))
 }
 
-func countTotalSizeofSmallDirs(input string) int64 {
+func findTotalSizeOfSmallestDirToFreeEnoughSpace(input string) int64 {
 	filesys := filesystem.Create(input)
 	filesys.ComputeSize()
-	dirs := filesys.FindDirsWithSizeLessThan(100000)
-	return lo.SumBy(dirs, func(d *filesystem.Dir) int64 {
-		return d.Size()
+	freeSpace := totalSpace - filesys.Size()
+	deleteSpaceRequired := freeSpaceRequired - freeSpace
+
+	smallestDir := lo.MinBy(filesys.FindDirsWithSizeGreaterThan(deleteSpaceRequired), func(dir *filesystem.Dir, min *filesystem.Dir) bool {
+		return dir.Size() < min.Size()
 	})
+
+	return smallestDir.Size()
 }
