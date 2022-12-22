@@ -4,6 +4,7 @@ import (
 	"adventofcode/day9/bridge"
 	_ "embed"
 	"fmt"
+	"github.com/samber/lo"
 )
 
 var (
@@ -22,27 +23,28 @@ func Execute() {
 func countTotalNumberOfTailPositionsChanged(input string) int {
 	motionGuide := bridge.NewMotionGuide(input)
 
-	head := bridge.Position{}
-	tail := head
+	knots := lo.Times(10, func(index int) *bridge.Position {
+		return &bridge.Position{}
+	})
 
-	tailPositions := []bridge.Position{tail}
+	tailPositions := []bridge.Position{*knots[len(knots)-1]}
 
 	for _, m := range motionGuide {
 		switch m.Direction {
 		case "L":
-			tailPositions = append(tailPositions, runSteps(&head, &tail, m.Steps, func(p *bridge.Position) {
+			tailPositions = append(tailPositions, runSteps(knots, m.Steps, func(p *bridge.Position) {
 				p.Horizontal--
 			})...)
 		case "R":
-			tailPositions = append(tailPositions, runSteps(&head, &tail, m.Steps, func(p *bridge.Position) {
+			tailPositions = append(tailPositions, runSteps(knots, m.Steps, func(p *bridge.Position) {
 				p.Horizontal++
 			})...)
 		case "U":
-			tailPositions = append(tailPositions, runSteps(&head, &tail, m.Steps, func(p *bridge.Position) {
+			tailPositions = append(tailPositions, runSteps(knots, m.Steps, func(p *bridge.Position) {
 				p.Vertical--
 			})...)
 		case "D":
-			tailPositions = append(tailPositions, runSteps(&head, &tail, m.Steps, func(p *bridge.Position) {
+			tailPositions = append(tailPositions, runSteps(knots, m.Steps, func(p *bridge.Position) {
 				p.Vertical++
 			})...)
 		}
@@ -51,16 +53,23 @@ func countTotalNumberOfTailPositionsChanged(input string) int {
 	return len(bridge.UniquePositions(tailPositions))
 }
 
-func runSteps(head, tail *bridge.Position, steps int, calculateHeadPosition func(p *bridge.Position)) []bridge.Position {
+func runSteps(knots []*bridge.Position, steps int, calculateHeadPosition func(p *bridge.Position)) []bridge.Position {
 	var tailPositions []bridge.Position
 	for i := 0; i < steps; i++ {
-		oldTail := *tail
+		calculateHeadPosition(knots[0])
+		oldTail := *knots[len(knots)-1]
 
-		calculateHeadPosition(head)
-		calculateTailPosition(tail, head)
+		for j, k := range knots {
+			if j == len(knots)-1 {
+				break
+			}
+			calculateTailPosition(knots[j+1], k)
+		}
 
-		if tail.Horizontal != oldTail.Horizontal || tail.Vertical != oldTail.Vertical {
-			tailPositions = append(tailPositions, *tail)
+		newTail := *knots[len(knots)-1]
+
+		if newTail.Horizontal != oldTail.Horizontal || newTail.Vertical != oldTail.Vertical {
+			tailPositions = append(tailPositions, newTail)
 		}
 	}
 
