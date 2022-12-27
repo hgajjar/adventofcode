@@ -4,7 +4,6 @@ import (
 	"adventofcode/day10/cpu"
 	"adventofcode/day10/instruction"
 	_ "embed"
-	"fmt"
 	"github.com/samber/lo"
 	"strconv"
 	"strings"
@@ -19,11 +18,11 @@ var (
 )
 
 func Execute() {
-	fmt.Println(calculateTotalSignalStrength(sampleInput))
-	fmt.Println(calculateTotalSignalStrength(actualInput))
+	calculateTotalSignalStrength(sampleInput)
+	calculateTotalSignalStrength(actualInput)
 }
 
-func calculateTotalSignalStrength(input string) int {
+func calculateTotalSignalStrength(input string) {
 	instructions := lo.Map(strings.Split(input, "\n"), func(item string, _ int) instruction.Instruction {
 		parts := strings.Split(item, " ")
 		var val int
@@ -33,5 +32,5 @@ func calculateTotalSignalStrength(input string) int {
 		return instruction.New(parts[0], val)
 	})
 
-	return cpu.New().Execute(instructions)
+	cpu.New().Execute(instructions)
 }
